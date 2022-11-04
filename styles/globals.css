@@ -1,3 +1,4 @@
+@import '~antd/dist/antd.css';
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -90,6 +91,11 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+}
+html,
+body,
+#__next {
+  height: 100%;
 }
 /* HTML5 display-role reset for older browsers */
 article,
