@@ -1,0 +1,12 @@
+.history
+.vscode
+assets/
+public/
+typings/
+.eslintrc.js
+.prettierrc.js
+env.js
+next.config.js
+next-env.d.ts
+tsconfig.json
+package.json

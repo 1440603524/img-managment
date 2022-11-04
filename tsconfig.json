@@ -1,20 +1,67 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "esnext", // 编译之后的版本目录
+    "lib": ["dom", "es2017"],// 指定要包含在编译中的库文件
+    "allowJs": true, // 是否允许编译js文件
+    "skipLibCheck": true, // 跳过声明文件类型检查
+    "strict": true, // 启动所有类型检查
+    "alwaysStrict": true, // 始终以严格模式检查每个模块
+    "forceConsistentCasingInFileNames": true, // 文件名强制使用一致的大小写
+    "noEmit": true, // 不生成编译文件
+    "esModuleInterop": true, // 通过导入内容创建命名空间
+    "module": "esnext", // 要使用的版本标准
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true
+    "isolatedModules": true, // 是否将每个文件作为单独的模块
+    "jsx": "preserve", // 指定jsx代码的开发环境
+    "incremental": true, // 保存项目信息图到最后一次编译的文件夹中
+    "noUnusedLocals": true, // 检查是否有定义了但是没有使用变量
+    "noFallthroughCasesInSwitch": true, // 检查switch是否有case没有使用break跳出switch
+    "moduleResolution": "node", // 模块解析策略
+    "baseUrl": "./", // 设置解析非相对模块名称的基本目录
+    "paths": {
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@typings/*": [
+        "typings/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@interface/*": [
+        "interface/*"
+      ],
+      "@helper/*": [
+        "helper/*",
+      ],
+      "@hooks/*": [
+        "hooks/*",
+      ],
+    },
+    "typeRoots": [
+      "./typings",
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
