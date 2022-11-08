@@ -1,0 +1,33 @@
+.homeWrapper {
+  display: flex;
+}
+
+.homeBox {
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: 20px 0;
+  flex: 1;
+}
+
+.homeLeft {
+  margin-right: 20px;
+}
+
+.homeLeftTitle {
+  padding: 0 20px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  span {
+    cursor: pointer;
+    color: #409eff;
+  }
+}
+
+.homeLeftListItem {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  margin-top: 20px;
+}

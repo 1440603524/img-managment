@@ -1,11 +1,10 @@
-import style from './index.module.scss'
 import PageWrapper from '@components/PageWrapper'
-import Home from '@components/Home'
+import Editor from '@components/Editor'
 
 export default function IndexPage(props: any) {
   return (
     <PageWrapper {...props}>
-      <Home></Home>
+      <Editor></Editor>
     </PageWrapper>
   )
 }
