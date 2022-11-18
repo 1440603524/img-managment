@@ -52,6 +52,9 @@
       "@hooks/*": [
         "hooks/*",
       ],
+      "@store/*": [
+        "store/*",
+      ],
     },
     "typeRoots": [
       "./typings",

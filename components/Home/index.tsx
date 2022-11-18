@@ -1,18 +1,21 @@
 import style from './index.module.scss'
 import { useRouter } from 'next/router'
+import { selectProject } from '@store/projectReducer'
+import { useAppSelector } from '@hooks/common'
+import { useEffect, useState } from 'react'
+import { fetchGetRecentProject } from '@api/project/recentProject'
+import { ProjectList } from '@interface/common'
 
-export default function Home() {
-  const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-  ]
-
+export default function Home(props: any) {
+  const project = useAppSelector(selectProject)
+  const [recentProjectList, setRecentProjectList] = useState<ProjectList>([])
   const router = useRouter()
 
-  const jumpProject = (id?: string) => {
+  useEffect(() => {
+    getRecentData()
+  }, [])
+
+  const jumpProject = (id?: number) => {
     if (id) {
       router.push(`/project?id=${id}`)
     } else {
@@ -20,12 +23,17 @@ export default function Home() {
     }
   }
 
-  const jumpFile = (id?: string) => {
+  const jumpFile = (id?: number) => {
     if (id) {
       router.push(`/file?id=${id}`)
     } else {
       router.push('/file')
     }
+  }
+
+  const getRecentData = async () => {
+    const projectList = await fetchGetRecentProject()
+    setRecentProjectList(projectList.data)
   }
 
   return (
@@ -36,14 +44,15 @@ export default function Home() {
           <span onClick={() => jumpProject()}>More</span>
         </div>
         <div className={style.homeLeftList}>
-          {!!data &&
-            data.map((item, index) => (
-              <div
-                key={index}
-                className={style.homeLeftListItem}
-                onClick={() => jumpProject()}
-              >
-                {item}
+          {!!recentProjectList &&
+            recentProjectList.map((item, index) => (
+              <div key={index} className={style.homeLeftListItem}>
+                <span onClick={() => jumpProject(item.id)}>
+                  {item.projectName}
+                </span>
+                <div className={style.projectDesc}>
+                  描述：{item.projectDesc}
+                </div>
               </div>
             ))}
         </div>
@@ -54,14 +63,13 @@ export default function Home() {
           <span onClick={() => jumpFile()}>More</span>
         </div>
         <div className={style.homeLeftList}>
-          {!!data &&
-            data.map((item, index) => (
-              <div
-                key={index}
-                className={style.homeLeftListItem}
-                onClick={() => jumpFile()}
-              >
-                {item}
+          {!!recentProjectList &&
+            recentProjectList.map((item, index) => (
+              <div key={index} className={style.homeLeftListItem}>
+                <span onClick={() => jumpFile()}>{item.projectName}</span>
+                <div className={style.projectDesc}>
+                  描述：{item.projectDesc}
+                </div>
               </div>
             ))}
         </div>

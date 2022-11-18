@@ -1,14 +1,9 @@
 import stringifyUrl from '@lib/stringifyUrl'
+import { message } from 'antd'
 
 export interface IConfig extends RequestInit {
   method?: 'GET' | 'POST'
   headers?: any
-}
-
-const fetchLogger = (data: Obj) => {
-  console.info(`[fetcher][请求开始][${process.env.ENV}]`)
-  console.log(new Date().toLocaleString('zh'), JSON.stringify(data, null, 2))
-  console.info(`[fetcher][请求结束][${process.env.ENV}]`)
 }
 
 export default function fetcher<T = any>(
@@ -45,25 +40,22 @@ export default function fetcher<T = any>(
       break
     case 'POST':
       baseConfig.body = JSON.stringify(requestData)
-      // 为 application/json 的 post 请求，添加 URL 编码后的请求体 json 字符串请求头字段
-      if (typeof window !== 'undefined') {
-        if (baseConfig.headers['Content-Type'] === 'application/json') {
-          baseConfig.headers['data-json-str'] = encodeURIComponent(
-            JSON.stringify(requestData)
-          )
-        }
-      }
       break
     default:
       break
   }
 
-  if (typeof window === 'undefined' && process.env.ENV === 'test') {
-    fetchLogger({ baseUrl, query: requestData, method: baseConfig.method })
-  }
-
   return fetch(baseUrl, baseConfig)
     .then(async (r) => {
+      if (r.status === 401) {
+        message.error({
+          content: '登陆失效，请重新登录',
+          duration: 1,
+          onClose: () => {
+            location.href = '/login'
+          },
+        })
+      }
       return await r.json()
     })
     .catch((error) => {

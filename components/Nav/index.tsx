@@ -1,6 +1,6 @@
 import style from './index.module.scss'
 import type { MenuProps } from 'antd'
-import { Menu, Button, Dropdown } from 'antd'
+import { Menu, Button, Dropdown, message } from 'antd'
 import { ReactNode, Key, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
@@ -70,7 +70,9 @@ export default function Nav(props: any) {
 
   const logOutSelectHandler = (key: string) => {
     if (key === 'logout') {
+      localStorage.removeItem('img-token')
       router.push('/login')
+      message.info('退出登录')
     } else if (key === 'editor') {
       router.push('/editor')
     }

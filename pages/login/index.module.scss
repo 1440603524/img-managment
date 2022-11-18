@@ -6,6 +6,11 @@
   padding-top: 100px;
   position: relative;
   color: #fff;
+  .show {
+    transform: translateY(-50%) translateX(0px);
+    opacity: 1;
+    pointer-events: all;
+  }
 }
 
 .bg {
@@ -24,8 +29,11 @@
   left: 250px;
   top: 50%;
   width: 300px;
-  transform: translateY(-50%);
   border-radius: 24px;
+  transform: translateY(-50%) translateX(-300px);
+  opacity: 0;
+  transition: all 0.8s ease-out;
+  pointer-events: none;
 }
 
 .title {
@@ -48,6 +56,7 @@
 }
 
 .input {
+  width: 100%;
   position: relative;
   background-color: transparent;
   border: none;
@@ -57,17 +66,25 @@
   box-sizing: border-box;
 }
 
-.confirm {
+.buttonWrapper {
+  display: flex;
+}
+
+.button {
   cursor: pointer;
   margin-top: 40px;
   font-size: 16px;
-  width: 150px;
-  height: 50px;
+  width: 130px;
+  height: 40px;
   border-radius: 6px;
-  line-height: 50px;
+  line-height: 40px;
   text-align: center;
   background-color: blue;
   background-image: linear-gradient(135deg, #abdcff 10%, #0396ff 100%);
+}
+
+.first {
+  margin-right: 30px;
 }
 
 .icon {

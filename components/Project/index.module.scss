@@ -15,3 +15,36 @@
 .formWrapper {
   padding: 0 20px;
 }
+
+.tableWrapper {
+  padding: 20px 20px 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+.checkFile {
+  cursor: pointer;
+  margin-right: 10px;
+  color: #008dff;
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.tableTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.projectDesc {
+  margin-top: 20px;
+}
+
+.drawer {
+  display: flex;
+  margin-bottom: 20px;
+}
