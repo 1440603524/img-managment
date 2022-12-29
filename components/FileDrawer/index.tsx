@@ -6,10 +6,20 @@ import type { UploadProps } from 'antd'
 import { fetchGetProjectNameList } from '@api/project/projectNameList'
 import { useState, useEffect } from 'react'
 import { fetchAddFile } from '@api/file/addFile'
+import { fetchUpdateFile } from '@api/file/updateFile'
 export default function FileDrawer(props: any) {
-  const { fileShow, hideFile, edit } = props
+  const {
+    fileShow,
+    hideFile,
+    edit,
+    drawerProjectName,
+    drawerFile,
+    updateFile,
+    oldImgId,
+  } = props
   const [ownerNameList, setOwnerNameList] = useState<ProjectNameList>([])
-  const [fileForm] = Form.useForm()
+  const [fileList, setFileList] = useState<any>([])
+  const [form] = Form.useForm()
 
   const { Dragger } = Upload
 
@@ -17,14 +27,17 @@ export default function FileDrawer(props: any) {
     name: 'file',
     multiple: true,
     listType: 'picture',
+    fileList: fileList,
     onChange(info) {
       const { status } = info.file
+      const { fileList } = info
       if (status !== 'uploading') {
       }
       if (status === 'done') {
         console.log(info.file)
       } else if (status === 'error') {
       }
+      setFileList([...fileList])
     },
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files)
@@ -34,6 +47,30 @@ export default function FileDrawer(props: any) {
   useEffect(() => {
     initData()
   }, [])
+
+  useEffect(() => {
+    form.setFieldValue('projectName', drawerProjectName)
+  }, [drawerProjectName])
+
+  useEffect(() => {
+    setFileList(
+      drawerFile
+        ? [
+            {
+              name: drawerFile.fileName,
+              status: 'done',
+              thumbUrl: drawerFile.fileUrl,
+            },
+          ]
+        : []
+    )
+  }, [drawerFile])
+
+  useEffect(() => {
+    if (!fileShow) {
+      setFileList([])
+    }
+  }, [fileShow])
 
   const initData = async () => {
     try {
@@ -45,18 +82,39 @@ export default function FileDrawer(props: any) {
   }
 
   const submit = async () => {
-    const {
-      projectName,
-      fileList: { fileList },
-    } = fileForm.getFieldsValue()
+    const { projectName, file } = form.getFieldsValue()
     if (!projectName) {
       message.warning('请选择项目')
+      return
     }
-    console.log(projectName, fileList)
+    if (
+      !file ||
+      file.fileList[file.fileList.length - 1].thumbUrl.startsWith('https')
+    ) {
+      message.warning('上传文件为空')
+      return
+    }
+    if (edit) {
+      const res = await fetchUpdateFile({
+        projectName,
+        file: file.fileList[file.fileList.length - 1],
+        id: oldImgId,
+      })
+      if (res.code === 400) {
+        message.error(res.message)
+        return
+      }
+      message.success(res.message)
+      hideFile()
+      updateFile()
+      return
+    }
+    const { fileList } = file
     const res = await fetchAddFile({ projectName, fileList })
     if (res.code === 200) {
       message.success(res.message)
       hideFile()
+      updateFile()
     } else {
       message.error(res.message)
     }
@@ -86,12 +144,13 @@ export default function FileDrawer(props: any) {
       open={fileShow}
       width={450}
     >
-      <Form name='file' form={fileForm}>
+      <Form name='file' form={form}>
         <Form.Item required={true} label='项目' name='projectName'>
           <Select
             placeholder='请选择'
             showSearch
             allowClear
+            disabled={!!drawerProjectName}
             optionFilterProp='children'
           >
             {!!ownerNameList &&
@@ -107,7 +166,7 @@ export default function FileDrawer(props: any) {
           wrapperCol={{ span: 21 }}
           required={true}
           label='文件'
-          name='fileList'
+          name='file'
         >
           <Dragger {...fileProps}>
             <p className='ant-upload-drag-icon'>

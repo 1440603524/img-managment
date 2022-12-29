@@ -15,6 +15,8 @@ export interface IFileListItem {
   creatorName: string
   editorName: string
   projectName: string
+  fileUrl: string
+  isParticipate: boolean
 }
 
 export interface IMemberListItem {

@@ -296,6 +296,12 @@ export default function Project() {
         handleCancel()
       }
     }
+    try {
+      const nameListRes = await fetchGetProjectNameList()
+      setProjectNameList(nameListRes.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const projectNameChange = (val: string) => {
@@ -377,6 +383,7 @@ export default function Project() {
         keyboard={false}
         maskClosable={false}
         onOk={handleOk}
+        onCancel={handleCancel}
       >
         <div className={style.projectName}>
           <Input

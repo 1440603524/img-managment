@@ -62,3 +62,13 @@
   display: flex;
   margin-bottom: 20px;
 }
+
+.update,
+.copy {
+  cursor: pointer;
+  color: #008dff;
+}
+
+.update {
+  margin-right: 20px;
+}
