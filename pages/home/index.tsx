@@ -1,11 +1,10 @@
 import PageWrapper from '@components/PageWrapper'
 import Home from '@components/Home'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { fetchUserInfo } from '@api/user/userInfo'
 
 export default function IndexPage(props: any) {
-  const router = useRouter()
+  const [userName, setUserName] = useState<string>('')
 
   useEffect(() => {
     initState()
@@ -13,9 +12,14 @@ export default function IndexPage(props: any) {
 
   const initState = async () => {
     const res = await fetchUserInfo()
+    if (res.code === 200) {
+      setUserName(res.data.userName)
+      localStorage.setItem(userName, res.data.userName)
+    }
+    console.log(res)
   }
   return (
-    <PageWrapper {...props}>
+    <PageWrapper {...props} userName={userName}>
       <Home></Home>
     </PageWrapper>
   )

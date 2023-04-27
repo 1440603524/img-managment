@@ -12,6 +12,7 @@ import {
 } from 'antd'
 import copy from 'copy-to-clipboard'
 import { FileList, ProjectNameList, IFileListItem } from '@interface/common'
+import { useRouter } from 'next/router'
 import type { ColumnsType } from 'antd/es/table'
 import { fetchGetProjectNameList } from '@api/project/projectNameList'
 import { useState, useEffect } from 'react'
@@ -19,6 +20,7 @@ import FileDrawer from '@components/FileDrawer'
 import { fetchGetFileList } from '@api/file/fileList'
 
 export default function File() {
+  const router = useRouter()
   const [edit, setEdit] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(1)
   const [fileList, setFileList] = useState<FileList>([])
@@ -38,10 +40,18 @@ export default function File() {
 
   const initData = async () => {
     try {
-      const initData = await Promise.all([
-        fetchGetProjectNameList(),
-        fetchGetFileList(),
-      ])
+      const initData = await Promise.all(
+        router.query.fileName
+          ? [
+              fetchGetProjectNameList(),
+              fetchGetFileList({
+                fileName: router.query.fileName,
+                page: current,
+                pageSize: 10,
+              }),
+            ]
+          : [fetchGetProjectNameList(), fetchGetFileList()]
+      )
       setProjectNameList(initData[0].data)
       setFileList(initData[1].data.list)
       setTotal(initData[1].data.total)
@@ -105,9 +115,11 @@ export default function File() {
     }
   }
 
-  const showImg = (fileUrl: string) => {
-    setImgVisible(true)
-    setImgUrl(fileUrl)
+  const showImg = (fileUrl: string, fileType: string) => {
+    if (fileType.includes('image')) {
+      setImgVisible(true)
+      setImgUrl(fileUrl)
+    }
   }
 
   const copyFileUrl = (fileUrl: string) => {
@@ -124,8 +136,11 @@ export default function File() {
       dataIndex: 'fileName',
       key: 'fileName',
       fixed: 'left',
-      render: (text, { fileUrl }) => (
-        <div onClick={() => showImg(fileUrl)} className={style.fileOperate}>
+      render: (text, { fileUrl, fileType }) => (
+        <div
+          onClick={() => showImg(fileUrl, fileType)}
+          className={`${fileType.includes('image') ? style.fileOperate : ''}`}
+        >
           {text}
         </div>
       ),

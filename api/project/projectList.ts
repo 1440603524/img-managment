@@ -4,7 +4,7 @@ export const fetchGetProjectList = (
   config: {
     editorName?: string
     ownerName?: string
-    projectName?: string
+    projectName?: string | string[]
     pageSize?: number
     page?: number
   } = {

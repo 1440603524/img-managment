@@ -7,6 +7,14 @@ import { fetchGetProjectNameList } from '@api/project/projectNameList'
 import { useState, useEffect } from 'react'
 import { fetchAddFile } from '@api/file/addFile'
 import { fetchUpdateFile } from '@api/file/updateFile'
+import OSS from 'ali-oss'
+
+const client = new OSS({
+  region: 'x',
+  accessKeyId: 'x',
+  accessKeySecret: 'x',
+  bucket: 'x',
+})
 export default function FileDrawer(props: any) {
   const {
     fileShow,
@@ -38,6 +46,12 @@ export default function FileDrawer(props: any) {
       } else if (status === 'error') {
       }
       setFileList([...fileList])
+    },
+    beforeUpload(file) {
+      if (!file.type.includes('image')) {
+        client.put(file.name, file)
+      }
+      return false
     },
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files)

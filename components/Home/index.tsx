@@ -1,31 +1,30 @@
 import style from './index.module.scss'
 import { useRouter } from 'next/router'
-import { selectProject } from '@store/projectReducer'
-import { useAppSelector } from '@hooks/common'
 import { useEffect, useState } from 'react'
 import { fetchGetRecentProject } from '@api/project/recentProject'
-import { ProjectList } from '@interface/common'
+import { fetchGetRecentFile } from '@api/file/recentFile'
+import { ProjectList, FileList } from '@interface/common'
 
 export default function Home(props: any) {
-  const project = useAppSelector(selectProject)
   const [recentProjectList, setRecentProjectList] = useState<ProjectList>([])
+  const [recentFileList, setRecentFileList] = useState<FileList>([])
   const router = useRouter()
 
   useEffect(() => {
     getRecentData()
   }, [])
 
-  const jumpProject = (id?: number) => {
-    if (id) {
-      router.push(`/project?id=${id}`)
+  const jumpProject = (projectName?: string) => {
+    if (projectName) {
+      router.push(`/project?projectName=${projectName}`)
     } else {
       router.push('/project')
     }
   }
 
-  const jumpFile = (id?: number) => {
-    if (id) {
-      router.push(`/file?id=${id}`)
+  const jumpFile = (fileName?: string) => {
+    if (fileName) {
+      router.push(`/file?fileName=${fileName}`)
     } else {
       router.push('/file')
     }
@@ -33,6 +32,8 @@ export default function Home(props: any) {
 
   const getRecentData = async () => {
     const projectList = await fetchGetRecentProject()
+    const fileList = await fetchGetRecentFile()
+    setRecentFileList(fileList.data)
     setRecentProjectList(projectList.data)
   }
 
@@ -47,7 +48,7 @@ export default function Home(props: any) {
           {!!recentProjectList &&
             recentProjectList.map((item, index) => (
               <div key={index} className={style.homeLeftListItem}>
-                <span onClick={() => jumpProject(item.id)}>
+                <span onClick={() => jumpProject(item.projectName)}>
                   {item.projectName}
                 </span>
                 <div className={style.projectDesc}>
@@ -63,12 +64,14 @@ export default function Home(props: any) {
           <span onClick={() => jumpFile()}>More</span>
         </div>
         <div className={style.homeLeftList}>
-          {!!recentProjectList &&
-            recentProjectList.map((item, index) => (
+          {!!recentFileList &&
+            recentFileList.map((item, index) => (
               <div key={index} className={style.homeLeftListItem}>
-                <span onClick={() => jumpFile()}>{item.projectName}</span>
+                <span onClick={() => jumpFile(item.fileName)}>
+                  {item.fileName}
+                </span>
                 <div className={style.projectDesc}>
-                  描述：{item.projectDesc}
+                  文件类型：{item.fileType}
                 </div>
               </div>
             ))}

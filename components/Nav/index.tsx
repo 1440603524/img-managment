@@ -36,7 +36,7 @@ export default function Nav(props: any) {
 
   const items: MenuItem[] = [
     getItem({
-      label: <div className={style.title}>IUIUIUIUIU</div>,
+      label: <div className={style.title}>文件管理平台</div>,
       key: '',
       children: [
         getItem({ label: '首页', key: 'home', icon: <HomeOutlined /> }),
@@ -100,7 +100,7 @@ export default function Nav(props: any) {
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </Button>
           <div className={style.user}>
-            欢迎您，<span className={style.userName}>XXX</span>
+            欢迎您，<span className={style.userName}>{props.userName}</span>
             <Dropdown
               overlayClassName={style.dropdownMenu}
               menu={{

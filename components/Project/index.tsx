@@ -31,7 +31,7 @@ import { fetchAddMember } from '@api/member/addMember'
 import { fetchDeleteMember } from '@api/member/deleteMember'
 import { fetchSearchMember } from '@api/member/findMember'
 
-export default function Project() {
+export default function Project(props: any) {
   const router = useRouter()
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [projectName, setProjectName] = useState<string>('')
@@ -238,10 +238,16 @@ export default function Project() {
 
   const initData = async () => {
     try {
-      const initData = await Promise.all([
-        fetchGetProjectNameList(),
-        fetchGetProjectList(),
-      ])
+      const initData = router.query.projectName
+        ? await Promise.all([
+            fetchGetProjectNameList(),
+            fetchGetProjectList({
+              projectName: router.query.projectName,
+              page: current,
+              pageSize: 10,
+            }),
+          ])
+        : await Promise.all([fetchGetProjectNameList(), fetchGetProjectList()])
       setProjectNameList(initData[0].data)
       setProjectList(initData[1].data)
     } catch (err) {

@@ -5,7 +5,7 @@ export const fetchGetFileList = (
     editorName?: string
     creatorName?: string
     projectName?: string
-    fileName?: string
+    fileName?: string | string[]
     pageSize?: number
     page?: number
   } = {
